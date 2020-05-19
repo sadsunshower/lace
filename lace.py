@@ -21,14 +21,14 @@ xterm = ['./nsrun', '/usr/bin/xterm', '-b', '5', '-fa', '"Monospace"', '-fs', '1
 switch = -1
 for host in range(len(config['hosts'])):
     if 'switch' in config['hosts'][host]:
-        if master != -1:
-            print(f'error: {config["hosts"][host]["ip"]} marked as switch host when {config["hosts"][master]["ip"]} is already switch host')
+        if switch != -1:
+            print(f'error: {config["hosts"][host]["ip"]} marked as switch host when {config["hosts"][switch]["ip"]} is already switch host')
             sys.exit(1)
 
         switch = host
 
 if switch == -1:
-    print(f'error: no master host set')
+    print(f'error: no switch host set')
     sys.exit(1)
 
 # Create a temporary file containing all the non-switch hosts which have yet to be setup
@@ -49,4 +49,4 @@ for host in range(len(config['hosts'])):
     if host == switch:
         continue
 
-    subprocess.Popen(xterm + ['-e', './vsetup.sh', str(host), str(switch), str(len(config['hosts'])), f'/proc/{switchpid}/ns/net', config['hosts'][host]['ip']])
+    subprocess.Popen(xterm + [str(host), str(switch), str(len(config['hosts'])), f'/proc/{switchpid}/ns/net', config['hosts'][host]['ip']])

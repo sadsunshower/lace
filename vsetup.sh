@@ -10,8 +10,9 @@ fi
 ip link add "veth$1" type veth peer name "veth$1b"
 ip link set "veth$1" up
 
-# Set ip address
+# Set IP address
 ip addr add "$5" dev "veth$1"
+echo "This host is $(hostname -I)"
 
 if [[ "$1" -eq "$2" ]]; then
 	# If this is the switch, wait for the other hosts
