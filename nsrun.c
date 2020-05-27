@@ -28,19 +28,21 @@ int main(int argc, char ** argv, char ** envp)
 		return 1;
 	}
 
-	// Raise the inheritable flag for cap_net_admin
+	// Raise the inheritable flag for cap_net_admin, cap_net_bind_service, cap_net_raw
 	cap_t caps = cap_get_proc();
 
-	const cap_value_t net[1] = { CAP_NET_ADMIN };
-	cap_set_flag(caps, CAP_INHERITABLE, 1, net, CAP_SET);
+	const cap_value_t net_caps[3] = { CAP_NET_ADMIN, CAP_NET_BIND_SERVICE, CAP_NET_RAW };
+	cap_set_flag(caps, CAP_INHERITABLE, 3, net_caps, CAP_SET);
 	cap_set_proc(caps);
 
-	// Raise the ambient flag for cap_net_admin, so it passes through exec
-	res = prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_RAISE, CAP_NET_ADMIN, 0, 0);
+	// Raise the ambient flag for cap_net_admin, cap_net_bind_service and cap_net_raw, so they passes through exec
+	for (int i = 0; i < 3; i++) {
+		res = prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_RAISE, net_caps[i], 0, 0);
 	
-	if (res == -1) {
-		perror("prctl");
-		return 1;
+		if (res == -1) {
+			perror("prctl");
+			return 1;
+		}
 	}
 
 	// Execute the target program
