@@ -1,15 +1,57 @@
 {
 	"options" : {},
-	"hosts": [
-		{
-			"ip" : "192.168.5.1/24",
-			"switch" : true
+	"lans" : {
+		"lan1" : {
+			"switch" : "host1",
+			"gateway" : "192.168.5.1"
 		},
-		{
-			"ip" : "192.168.5.2/24"
-		},
-		{
-			"ip" : "192.168.5.3/24"
+		"lan2" : {
+			"switch" : "host1"
 		}
-	]
+	},
+	"hosts" : {
+		"host1" : {
+			"interfaces" : [
+				{
+					"lan" : "lan1",
+					"ip" : "192.168.5.1/24"
+				},
+				{
+					"lan" : "lan2",
+					"ip" : "192.168.6.1/24"
+				}
+			]
+		},
+		"host2" : {
+			"interfaces" : [
+				{
+					"lan" : "lan1",
+					"ip" : "192.168.5.2/24"
+				}
+			]
+		},
+		"host3" : {
+			"interfaces" : [
+				{
+					"lan" : "lan1",
+					"ip" : "192.168.5.3/24"
+				}
+			]
+		},
+		"host4" : {
+			"interfaces" : [
+				{
+					"lan" : "lan2",
+					"ip" : "192.168.6.2/24"
+				}
+			]
+		},
+		"host5" : {
+			"interfaces" : [
+				{
+					"lan" : "lan2"
+				}
+			]
+		}
+	}
 }
